@@ -1,3 +1,16 @@
+;;; minitest.el --- An Emacs mode for ruby minitest files
+
+;; Copyright © 2013 Arthur Nogueira Neves
+
+;; Author: Arthur Neves
+;; URL: https://github.com/arthurnn/
+;; Version: 0.1
+;; Package-Requires: ((dash "1.0.0"))
+
+;; This file is NOT part of GNU Emacs.
+
+;;; Code:
+
 (require 'dash)
 (require 'ansi-color)
 
@@ -93,3 +106,5 @@ The current directory is assumed to be the project's root otherwise."
   :group 'minitest)
 
 (provide 'minitest)
+
+;;; minitest.el ends here
