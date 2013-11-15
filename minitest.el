@@ -3,8 +3,8 @@
 ;; Copyright © 2013 Arthur Nogueira Neves
 
 ;; Author: Arthur Neves
-;; URL: https://github.com/arthurnn/
-;; Version: 0.1
+;; URL: https://github.com/arthurnn/minitest-emacs
+;; Version: 0.2
 ;; Package-Requires: ((dash "1.0.0"))
 
 ;; This file is NOT part of GNU Emacs.
