@@ -2,6 +2,26 @@
 
 A minitest mode for emacs
 
+# Installation
+
+## Manual
+
+Just drop `minitest.el`. somewhere in your `load-path`. And:
+```lisp
+(add-to-list 'load-path "~/emacs.d/vendor")
+(require 'minitest)
+```
+
+## Marmalade
+
+If you're an Emacs 24 user or you have a recent version of package.el
+you can install minitest.el from the [Marmalade](http://marmalade-repo.org/) repository. Just run:
+```
+M-x package-install minitest
+```
+
+## MELPA
+Not yet deployed. Soon.
 
 ## License
 
