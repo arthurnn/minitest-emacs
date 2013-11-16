@@ -12,16 +12,11 @@ Just drop `minitest.el`. somewhere in your `load-path`. And:
 (require 'minitest)
 ```
 
-## Marmalade
+## Using [Marmalade](http://marmalade-repo.org/) or [MELPA](http://melpa.milkbox.net/)
 
-If you're an Emacs 24 user or you have a recent version of package.el
-you can install minitest.el from the [Marmalade](http://marmalade-repo.org/) repository. Just run:
 ```
 M-x package-install minitest
 ```
-
-## MELPA
-Not yet deployed. Soon.
 
 # Usage
 
