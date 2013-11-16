@@ -4,7 +4,7 @@
 
 ;; Author: Arthur Neves
 ;; URL: https://github.com/arthurnn/minitest-emacs
-;; Version: 0.2
+;; Version: 0.3
 ;; Package-Requires: ((dash "1.0.0"))
 
 ;; This file is NOT part of GNU Emacs.
@@ -24,7 +24,7 @@
   :type 'boolean
   :group 'minitest)
 
-(defcustom minitest-default-env ""
+(defcustom minitest-default-env nil
   "Default env vars for minitest"
   :type 'string
   :group 'minitest)
@@ -33,7 +33,7 @@
   (concat "*Minitest " file-or-dir "*"))
 
 (defun minitest-test-command ()
-  (if (minitest-zeus-p) "test" "ruby -I'lib:test'"))
+  (if (minitest-zeus-p) "test" '("ruby" "-Ilib:test")))
 
 (defun minitest-project-root ()
   "Retrieve the root directory of a project if available.
@@ -62,10 +62,13 @@ The current directory is assumed to be the project's root otherwise."
         (default-directory (minitest-project-root))
         (compilation-scroll-output t)
         (command (minitest-test-command))
-        (zeus-command (if (minitest-zeus-p) "bundle exec zeus" nil)))
+        (zeus-command (if (minitest-zeus-p) '("bundle" "exec" "zeus") nil)))
     (if file-name
         (compilation-start
-         (concat minitest-default-env " " zeus-command " " command " " file-name (or post-command ""))
+         (mapconcat 'shell-quote-argument
+                    (-flatten
+                     (--remove (eq nil it)
+                               (list minitest-default-env zeus-command command file-name post-command))) " ")
          'minitest-compilation-mode
          (lambda (arg) (minitest-buffer-name file-name)))
       (error "Buffer is not visiting a file"))))
@@ -85,7 +88,7 @@ The current directory is assumed to be the project's root otherwise."
   (let ((str (thing-at-point 'line)))
     (if (minitest--extract-str str)
         (minitest--file-command
-         (format  " -n\"test_%s\"" (replace-regexp-in-string " " "_" (match-string 1 str)))))))
+         (format  "-ntest_%s" (replace-regexp-in-string " " "_" (match-string 1 str)))))))
 
 ;;; Minor mode
 (defvar minitest-mode-map
