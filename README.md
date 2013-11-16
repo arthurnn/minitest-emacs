@@ -23,6 +23,20 @@ M-x package-install minitest
 ## MELPA
 Not yet deployed. Soon.
 
+# Usage
+
+Command                                         | Description                                             | RuboCop mode binding
+------------------------------------------------|---------------------------------------------------------|--------------------
+<kbd>M-x minitest-verify</kbd>                  | Runs minitest test on the current file                  | `C-c , v`
+<kbd>M-x minitest-verify-single</kbd>           | Runs minitest test on the selected line                 | `C-c , s`
+
+
+To enable minitest mode on ruby files:
+
+```lisp
+(add-hook 'ruby-mode-hook 'minitest-mode)
+```
+
 ## License
 
 The MIT License (MIT)
