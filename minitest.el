@@ -56,31 +56,36 @@ The current directory is assumed to be the project's root otherwise."
   (ansi-color-apply-on-region (point-min) (point-max))
   (toggle-read-only))
 
+(defun minitest--run-command (command &optional file-name)
+  (let ((default-directory (minitest-project-root))
+        (compilation-scroll-output t))
+    (compilation-start
+     (concat (or minitest-default-env "") " " command)
+     'minitest-compilation-mode
+     (lambda (arg) (minitest-buffer-name (or file-name ""))))))
+
 (defun minitest--file-command (&optional post-command)
   "Run COMMAND on currently visited file."
   (let ((file-name (buffer-file-name (current-buffer)))
-        (default-directory (minitest-project-root))
-        (compilation-scroll-output t)
         (command (minitest-test-command))
         (zeus-command (if (minitest-zeus-p) '("bundle" "exec" "zeus") nil)))
     (if file-name
-        (compilation-start
+        (minitest--run-command
          (mapconcat 'shell-quote-argument
                     (-flatten
                      (--remove (eq nil it)
-                               (list minitest-default-env zeus-command command file-name post-command))) " ")
-         'minitest-compilation-mode
-         (lambda (arg) (minitest-buffer-name file-name)))
+                               (list zeus-command command file-name post-command))) " ")
+         file-name)
       (error "Buffer is not visiting a file"))))
+
+(defun minitest--extract-str (str)
+  (or (string-match "test \"\\([^\"]+?\\)\" do" str)
+      (string-match "def test_\\([_A-Za-z0-9]+\\)" str)))
 
 (defun minitest-verify ()
   "Run on current file."
   (interactive)
   (minitest--file-command))
-
-(defun minitest--extract-str (str)
-  (or (string-match "test \"\\([^\"]+?\\)\" do" str)
-      (string-match "def test_\\([_A-Za-z0-9]+\\)" str)))
 
 (defun minitest-verify-single ()
   "Run on current file."
