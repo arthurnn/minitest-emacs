@@ -24,6 +24,7 @@ Command                                         | Description                   
 ------------------------------------------------|---------------------------------------------------------|--------------------
 <kbd>M-x minitest-verify</kbd>                  | Runs minitest test on the current file                  | `C-c , v`
 <kbd>M-x minitest-verify-single</kbd>           | Runs minitest test on the selected line                 | `C-c , s`
+<kbd>M-x minitest-rerun</kbd>                   | Runs the last test again                                | `C-c , r`
 
 
 To enable minitest mode on ruby files:
