@@ -56,11 +56,16 @@ The current directory is assumed to be the project's root otherwise."
   (ansi-color-apply-on-region (point-min) (point-max))
   (toggle-read-only))
 
+(defvar minitest--last-command nil
+  "Variable to store the last command running.")
+
 (defun minitest--run-command (command &optional file-name)
   (let ((default-directory (minitest-project-root))
-        (compilation-scroll-output t))
+        (compilation-scroll-output t)
+        (actual-command (concat (or minitest-default-env "") " " command)))
+    (setq minitest--last-command (list command file-name))
     (compilation-start
-     (concat (or minitest-default-env "") " " command)
+     actual-command
      'minitest-compilation-mode
      (lambda (arg) (minitest-buffer-name (or file-name ""))))))
 
@@ -95,13 +100,20 @@ The current directory is assumed to be the project's root otherwise."
         (minitest--file-command
          (format  "-ntest_%s" (replace-regexp-in-string " " "_" (match-string 1 str)))))))
 
+(defun minitest-rerun ()
+  "Run the last command"
+  (interactive)
+  (if minitest--last-command
+      (apply #'minitest--run-command minitest--last-command)
+    (error "There is no previous command to run")))
+
 ;;; Minor mode
 (defvar minitest-mode-map
   (let ((map (make-sparse-keymap)))
     (let ((prefix-map (make-sparse-keymap)))
       (define-key prefix-map (kbd "v") 'minitest-verify)
       (define-key prefix-map (kbd "s") 'minitest-verify-single)
-
+      (define-key prefix-map (kbd "r") 'minitest-rerun)
       (define-key map minitest-keymap-prefix prefix-map))
     map)
   "Keymap for minitest-mode.")
