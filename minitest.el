@@ -83,9 +83,13 @@ The current directory is assumed to be the project's root otherwise."
          file-name)
       (error "Buffer is not visiting a file"))))
 
-(defun minitest--extract-str (str)
-  (or (string-match "test \"\\([^\"]+?\\)\" do" str)
-      (string-match "def test_\\([_A-Za-z0-9]+\\)" str)))
+(defun minitest--extract-str ()
+  (save-excursion
+    (save-restriction
+      (widen)
+      (end-of-line)
+      (or (re-search-backward "test \"\\([^\"]+?\\)\"" nil t)
+          (re-search-backward "def test_\\([_A-Za-z0-9]+\\)" nil t)))))
 
 (defun minitest-verify ()
   "Run on current file."
@@ -95,10 +99,12 @@ The current directory is assumed to be the project's root otherwise."
 (defun minitest-verify-single ()
   "Run on current file."
   (interactive)
-  (let ((str (thing-at-point 'line)))
-    (if (minitest--extract-str str)
+  (if (minitest--extract-str)
+      (let* ((str (match-string 1))
+             (post_command (replace-regexp-in-string " " "_" str)))
         (minitest--file-command
-         (format  "-ntest_%s" (replace-regexp-in-string " " "_" (match-string 1 str)))))))
+         (format  "-ntest_%s" post_command)))
+      (error "No test found. Make sure you are on a file that has `def test_foo` or `test \"foo\"`")))
 
 (defun minitest-rerun ()
   "Run the last command"
