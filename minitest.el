@@ -91,6 +91,11 @@ The current directory is assumed to be the project's root otherwise."
       (or (re-search-backward "test \"\\([^\"]+?\\)\"" nil t)
           (re-search-backward "def test_\\([_A-Za-z0-9]+\\)" nil t)))))
 
+(defun minitest-verify-all ()
+  "Run all tests."
+  (interactive)
+  (minitest--run-command "bundle exec rake"))
+
 (defun minitest-verify ()
   "Run on current file."
   (interactive)
@@ -117,6 +122,7 @@ The current directory is assumed to be the project's root otherwise."
 (defvar minitest-mode-map
   (let ((map (make-sparse-keymap)))
     (let ((prefix-map (make-sparse-keymap)))
+      (define-key prefix-map (kbd "a") 'minitest-verify-all)
       (define-key prefix-map (kbd "v") 'minitest-verify)
       (define-key prefix-map (kbd "s") 'minitest-verify-single)
       (define-key prefix-map (kbd "r") 'minitest-rerun)
