@@ -52,9 +52,9 @@ The current directory is assumed to be the project's root otherwise."
   (add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
 
 (defun colorize-compilation-buffer ()
-  (toggle-read-only)
+  (read-only-mode 1)
   (ansi-color-apply-on-region (point-min) (point-max))
-  (toggle-read-only))
+  (read-only-mode -1))
 
 (defvar minitest--last-command nil
   "Variable to store the last command running.")
