@@ -24,6 +24,11 @@
   :type 'boolean
   :group 'minitest)
 
+(defcustom minitest-use-bundler t
+  "minitest mode should use bundler?"
+  :type 'boolean
+  :group 'minitest)
+
 (defcustom minitest-default-env nil
   "Default env vars for minitest"
   :type 'string
@@ -72,14 +77,15 @@ The current directory is assumed to be the project's root otherwise."
 (defun minitest--file-command (&optional post-command)
   "Run COMMAND on currently visited file."
   (let ((file-name (buffer-file-name (current-buffer)))
+	(bundle '("bundle" "exec"))
         (command (minitest-test-command))
-        (zeus-command (if (minitest-zeus-p) '("bundle" "exec" "zeus") nil)))
+        (zeus-command (if (minitest-zeus-p) "zeus" nil)))
     (if file-name
         (minitest--run-command
          (mapconcat 'shell-quote-argument
                     (-flatten
                      (--remove (eq nil it)
-                               (list zeus-command command file-name post-command))) " ")
+                               (list bundle zeus-command command file-name post-command))) " ")
          file-name)
       (error "Buffer is not visiting a file"))))
 
