@@ -65,6 +65,9 @@ The current directory is assumed to be the project's root otherwise."
   "Variable to store the last command running.")
 
 (defun minitest--run-command (command &optional file-name)
+  (if (fboundp 'rvm-activate-corresponding-ruby)
+      (rvm-activate-corresponding-ruby))
+
   (let ((default-directory (minitest-project-root))
         (compilation-scroll-output t)
         (actual-command (concat (or minitest-default-env "") " " command)))
