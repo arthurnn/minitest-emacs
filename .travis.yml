@@ -1,0 +1,5 @@
+language: emacs-lisp
+before_install:
+  - curl -fsSkL "https://raw.github.com/cask/cask/${TRAVIS_BRANCH}/go" | python
+  - export PATH="${HOME}/.cask/bin:$PATH"
+script: cask exec ert-runner
