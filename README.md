@@ -1,6 +1,6 @@
 # minitest.el
 
-[![Build Status](https://travis-ci.org/arthurnn/minitest-emacs.png?branch=master)](https://travis-ci.org/arthurnn/minitest-emacs)
+[![Build Status](https://travis-ci.org/arthurnn/minitest-emacs.svg?branch=master)](https://travis-ci.org/arthurnn/minitest-emacs)
 
 A minitest mode for emacs
 
