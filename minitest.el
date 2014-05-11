@@ -4,7 +4,7 @@
 
 ;; Author: Arthur Neves
 ;; URL: https://github.com/arthurnn/minitest-emacs
-;; Version: 0.7
+;; Version: 0.7.1
 ;; Package-Requires: ((dash "1.0.0"))
 
 ;; This file is NOT part of GNU Emacs.
