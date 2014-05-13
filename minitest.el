@@ -34,11 +34,18 @@
   :type 'string
   :group 'minitest)
 
+(defcustom minitest-use-spring nil
+  "Use spring over zues and the default runner"
+  :type 'boolean
+  :group 'minitest)
+
 (defun minitest-buffer-name (file-or-dir)
   (concat "*Minitest " file-or-dir "*"))
 
 (defun minitest-test-command ()
-  (if (minitest-zeus-p) "test" '("ruby" "-Ilib:test:spec")))
+   (cond (minitest-use-spring '("spring" "testunit"))
+        ((minitest-zeus-p) "test")
+        (t '("ruby" "-Ilib:test:spec"))))
 
 (defun minitest-project-root ()
   "Retrieve the root directory of a project if available.
@@ -80,7 +87,7 @@ The current directory is assumed to be the project's root otherwise."
 (defun minitest--file-command (&optional post-command)
   "Run COMMAND on currently visited file."
   (let ((file-name (buffer-file-name (current-buffer)))
-	(bundle '("bundle" "exec"))
+        (bundle '("bundle" "exec"))
         (command (minitest-test-command))
         (zeus-command (if (minitest-zeus-p) "zeus" nil)))
     (if file-name
