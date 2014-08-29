@@ -4,7 +4,7 @@
 
 ;; Author: Arthur Neves
 ;; URL: https://github.com/arthurnn/minitest-emacs
-;; Version: 0.7.1
+;; Version: 0.7.2
 ;; Package-Requires: ((dash "1.0.0"))
 
 ;; This file is NOT part of GNU Emacs.
@@ -104,8 +104,9 @@ The current directory is assumed to be the project's root otherwise."
     (save-restriction
       (widen)
       (end-of-line)
-      (or (re-search-backward "test \"\\([^\"]+?\\)\"" nil t)
-          (re-search-backward "def test_\\([_A-Za-z0-9]+\\)" nil t)))))
+      (or (re-search-backward "test '\\([^\"]+?\\)'" nil t)
+	  (re-search-backward "test \"\\([^\"]+?\\)\"" nil t)
+	  (re-search-backward "def test_\\([_A-Za-z0-9]+\\)" nil t)))))
 
 (defun minitest-verify-all ()
   "Run all tests."
