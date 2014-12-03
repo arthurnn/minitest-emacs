@@ -154,6 +154,19 @@ The current directory is assumed to be the project's root otherwise."
   :keymap minitest-mode-map
   :group 'minitest)
 
-(provide 'minitest)
+(defvar minitest-snippets-dir
+  (let ((current-file-name (or load-file-name (buffer-file-name))))
+    (expand-file-name "snippets" (file-name-directory current-file-name)))
+  "The directory containing minitest snippets.")
 
+(defun minitest-install-snippets ()
+  "Add `minitest-snippets-dir' to `yas-snippet-dirs' and load\
+ snippets from it."
+  (let ((yasnippet-available (require 'yasnippet nil t)))
+    (if yasnippet-available
+        (progn
+          (add-to-list 'yas-snippet-dirs minitest-snippets-dir t)
+          (yas-load-directory minitest-snippets-dir)))))
+
+(provide 'minitest)
 ;;; minitest.el ends here
