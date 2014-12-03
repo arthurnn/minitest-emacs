@@ -105,8 +105,8 @@ The current directory is assumed to be the project's root otherwise."
       (widen)
       (end-of-line)
       (or (re-search-backward "test '\\([^\"]+?\\)'" nil t)
-	  (re-search-backward "test \"\\([^\"]+?\\)\"" nil t)
-	  (re-search-backward "def test_\\([_A-Za-z0-9]+\\)" nil t)))))
+          (re-search-backward "test \"\\([^\"]+?\\)\"" nil t)
+          (re-search-backward "def test_\\([_A-Za-z0-9]+\\)" nil t)))))
 
 (defun minitest-verify-all ()
   "Run all tests."
@@ -154,6 +154,40 @@ The current directory is assumed to be the project's root otherwise."
   :keymap minitest-mode-map
   :group 'minitest)
 
-(provide 'minitest)
+(defvar minitest-snippets-dir
+  (let ((current-file-name (or load-file-name (buffer-file-name))))
+    (expand-file-name "snippets" (file-name-directory current-file-name)))
+  "The directory containing minitest snippets.")
 
+(defun minitest-install-snippets ()
+  "Add `minitest-snippets-dir' to `yas-snippet-dirs' and load\
+ snippets from it."
+  (let ((yasnippet-available (require 'yasnippet nil t)))
+    (if yasnippet-available
+        (progn
+          (add-to-list 'yas-snippet-dirs minitest-snippets-dir t)
+          (yas-load-directory minitest-snippets-dir)))))
+
+(defconst minitest-test-file-name-re "\\(_\\|-\\)test\\.rb\\'"
+  "The regex to identify test files.")
+
+(defun minitest-test-file-p (file-name)
+  "Returns true if the specified file name is a test."
+  (numberp (string-match minitest-test-file-name-re file-name)))
+
+(defun minitest-buffer-is-test-p ()
+  "Return true if the current buffer is a test."
+  (and (buffer-file-name)
+       (minitest-test-file-p (buffer-file-name))))
+
+;;;###autoload
+(defun minitest-enable-appropriate-mode ()
+  (if (minitest-buffer-is-test-p)
+      (minitest-mode)))
+
+;;;###autoload
+(dolist (hook '(ruby-mode-hook enh-ruby-mode-hook))
+  (add-hook hook 'minitest-enable-appropriate-mode))
+
+(provide 'minitest)
 ;;; minitest.el ends here

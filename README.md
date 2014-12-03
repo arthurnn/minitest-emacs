@@ -36,6 +36,14 @@ To enable minitest mode on ruby files:
 (add-hook 'ruby-mode-hook 'minitest-mode)
 ```
 
+## Snippets
+
+To add snippets to yasnippet:
+```lisp
+(eval-after-load 'minitest-mode
+  '(minitest-install-snippets))
+```
+
 ## License
 
 The MIT License (MIT)
