@@ -152,7 +152,17 @@ The current directory is assumed to be the project's root otherwise."
   "Minor mode for *_test (minitest) files"
   :lighter " Minitest"
   :keymap minitest-mode-map
-  :group 'minitest)
+  :group 'minitest
+  (if minitest-mode
+      (progn
+	(when (boundp 'yas-extra-modes)
+	  (if (fboundp 'yas-activate-extra-mode)
+	      ;; Yasnippet 0.8.1+
+	      (yas-activate-extra-mode 'minitest-mode)
+	    (make-local-variable 'yas-extra-modes)
+	    (add-to-list 'yas-extra-modes 'minitest-mode)
+	    (yas--load-pending-jits)))))
+  )
 
 (defvar minitest-snippets-dir
   (let ((current-file-name (or load-file-name (buffer-file-name))))
