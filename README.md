@@ -40,7 +40,7 @@ To enable minitest mode on ruby files:
 
 To add snippets to yasnippet:
 ```lisp
-(eval-after-load 'minitest-mode
+(eval-after-load 'minitest
   '(minitest-install-snippets))
 ```
 
