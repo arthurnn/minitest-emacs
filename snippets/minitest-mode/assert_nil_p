@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: assert_nil()
+# key: assert_nil()
+# --
+assert_nil(${1:obj}, ${2:msg = nil})$0

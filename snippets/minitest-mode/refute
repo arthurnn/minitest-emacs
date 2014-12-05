@@ -2,4 +2,4 @@
 # name: refute
 # key: refute
 # --
-refute(${1:test}, ${2:msg = nil})$0
+refute ${1:test}, ${2:msg = nil}$0

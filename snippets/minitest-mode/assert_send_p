@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: assert_send()
+# key: assert_send()
+# --
+assert_send(${1:send_ary}, ${2:m = nil})$0

@@ -2,4 +2,4 @@
 # name: refute_empty
 # key: refute_empty
 # --
-refute_empty(${1:obj}, ${2:msg = nil})$0
+refute_empty ${1:obj}, ${2:msg = nil}$0

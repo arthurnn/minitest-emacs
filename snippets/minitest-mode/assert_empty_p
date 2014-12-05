@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: assert_empty()
+# key: assert_empty()
+# --
+assert_empty(${1:obj}, ${2:msg = nil})$0

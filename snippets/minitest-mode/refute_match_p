@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: refute_match()
+# key: refute_match()
+# --
+refute_match(${1:matcher}, ${2:obj}, ${3:msg = nil})$0

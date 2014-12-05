@@ -2,4 +2,4 @@
 # name: assert_same
 # key: assert_same
 # --
-assert_same(${1:exp}, ${2:act}, ${3:msg = nil})$0
+assert_same ${1:exp}, ${2:act}, ${3:msg = nil}$0

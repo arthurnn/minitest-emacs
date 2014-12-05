@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: refute_predicate()
+# key: refute_predicate()
+# --
+refute_predicate(${1:o1}, ${2:op}, ${3:msg = nil})$0

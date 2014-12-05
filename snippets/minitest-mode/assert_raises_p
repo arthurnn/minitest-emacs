@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: assert_raises()
+# key: assert_raises()
+# --
+assert_raises(${1:*exp})$0

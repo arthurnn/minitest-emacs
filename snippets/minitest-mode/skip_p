@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: skip()
+# key: skip()
+# --
+skip(${1:msg = nil}, ${2:bt = caller})$0

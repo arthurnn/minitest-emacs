@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: refute_kind_of()
+# key: refute_kind_of()
+# --
+refute_kind_of(${1:cls}, ${2:obj}, ${3:msg = nil})$0

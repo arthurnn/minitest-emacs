@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: refute_in_delta()
+# key: refute_in_delta()
+# --
+refute_in_delta(${1:exp}, ${2:act}, ${3:delta = 0.001}, ${4:msg = nil})$0

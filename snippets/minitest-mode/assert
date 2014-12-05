@@ -2,4 +2,4 @@
 # name: assert
 # key: assert
 # --
-assert(${1:test}, ${2:msg = nil})$0
+assert ${1:test}, ${2:msg = nil}$0

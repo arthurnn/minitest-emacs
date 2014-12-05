@@ -2,4 +2,4 @@
 # name: assert_includes
 # key: assert_includes
 # --
-assert_includes(${1:collection}, ${2:obj}, ${3:msg = nil})$0
+assert_includes ${1:collection}, ${2:obj}, ${3:msg = nil}$0

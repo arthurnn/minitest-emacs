@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: flunk()
+# key: flunk()
+# --
+flunk(${1:msg = nil})$0

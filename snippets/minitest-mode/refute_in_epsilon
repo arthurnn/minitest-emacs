@@ -2,4 +2,4 @@
 # name: refute_in_epsilon
 # key: refute_in_epsilon
 # --
-refute_in_epsilon(${1:a}, ${2:b}, ${3:epsilon = 0.001}, ${4:msg = nil})$0
+refute_in_epsilon ${1:a}, ${2:b}, ${3:epsilon = 0.001}, ${4:msg = nil}$0

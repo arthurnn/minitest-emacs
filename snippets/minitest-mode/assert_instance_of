@@ -2,4 +2,4 @@
 # name: assert_instance_of
 # key: assert_instance_of
 # --
-assert_instance_of(${1:cls}, ${2:obj}, ${3:msg = nil})$0
+assert_instance_of ${1:cls}, ${2:obj}, ${3:msg = nil}$0

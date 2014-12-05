@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: assert_in_epsilon()
+# key: assert_in_epsilon()
+# --
+assert_in_epsilon(${1:a}, ${2:b}, ${3:epsilon = 0.001}, ${4:msg = nil})$0

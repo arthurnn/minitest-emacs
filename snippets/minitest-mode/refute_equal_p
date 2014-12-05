@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: refute_equal()
+# key: refute_equal()
+# --
+refute_equal(${1:exp}, ${2:act}, ${3:msg = nil})$0
