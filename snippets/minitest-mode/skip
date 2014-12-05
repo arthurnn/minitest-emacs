@@ -2,4 +2,4 @@
 # name: skip
 # key: skip
 # --
-skip(${1:msg = nil}, ${2:bt = caller})$0
+skip ${1:msg = nil}, ${2:bt = caller}$0

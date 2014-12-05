@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: assert_equal()
+# key: assert_equal()
+# --
+assert_equal(${1:exp}, ${2:act}, ${3:msg = nil})$0

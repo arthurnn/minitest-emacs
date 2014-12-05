@@ -2,4 +2,4 @@
 # name: assert_silent
 # key: assert_silent
 # --
-assert_silent()$0
+assert_silent $0

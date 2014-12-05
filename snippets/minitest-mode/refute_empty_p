@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: refute_empty()
+# key: refute_empty()
+# --
+refute_empty(${1:obj}, ${2:msg = nil})$0

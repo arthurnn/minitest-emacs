@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: assert_throws()
+# key: assert_throws()
+# --
+assert_throws(${1:sym}, ${2:msg = nil})$0

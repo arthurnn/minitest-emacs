@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: refute()
+# key: refute()
+# --
+refute(${1:test}, ${2:msg = nil})$0

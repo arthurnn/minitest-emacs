@@ -2,4 +2,4 @@
 # name: assert_respond_to
 # key: assert_respond_to
 # --
-assert_respond_to(${1:obj}, ${2:meth}, ${3:msg = nil})$0
+assert_respond_to ${1:obj}, ${2:meth}, ${3:msg = nil}$0

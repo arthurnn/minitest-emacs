@@ -2,4 +2,4 @@
 # name: refute_respond_to
 # key: refute_respond_to
 # --
-refute_respond_to(${1:obj}, ${2:meth}, ${3:msg = nil})$0
+refute_respond_to ${1:obj}, ${2:meth}, ${3:msg = nil}$0

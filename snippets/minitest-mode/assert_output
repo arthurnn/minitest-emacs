@@ -2,4 +2,4 @@
 # name: assert_output
 # key: assert_output
 # --
-assert_output(${1:stdout = nil}, ${2:stderr = nil})$0
+assert_output ${1:stdout = nil}, ${2:stderr = nil}$0

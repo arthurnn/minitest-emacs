@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: assert_silent()
+# key: assert_silent()
+# --
+assert_silent()$0

@@ -2,4 +2,4 @@
 # name: refute_instance_of
 # key: refute_instance_of
 # --
-refute_instance_of(${1:cls}, ${2:obj}, ${3:msg = nil})$0
+refute_instance_of ${1:cls}, ${2:obj}, ${3:msg = nil}$0

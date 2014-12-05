@@ -2,4 +2,4 @@
 # name: assert_match
 # key: assert_match
 # --
-assert_match(${1:matcher}, ${2:obj}, ${3:msg = nil})$0
+assert_match ${1:matcher}, ${2:obj}, ${3:msg = nil}$0
