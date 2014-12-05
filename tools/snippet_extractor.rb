@@ -23,13 +23,13 @@ assertions.each do |assertion|
     file.puts(sprintf(line_2, file_name + "()"))
     file.puts(sprintf(line_3, file_name + "()"))
     file.puts(line_4)
-    file.puts(snippet)
+    file.write(snippet)
   end
   File.open(dir + ("/#{file_name}"), "w") do |file|
     file.puts(line_1)
     file.puts(sprintf(line_2, file_name))
     file.puts(sprintf(line_3, file_name))
     file.puts(line_4)
-    file.puts(flat_snippet)
+    file.write(flat_snippet)
   end
 end
