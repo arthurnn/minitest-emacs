@@ -1,10 +1,10 @@
 ;;; minitest.el --- An Emacs mode for ruby minitest files
 
-;; Copyright © 2013-2014 Arthur Nogueira Neves
+;; Copyright © 2013-2015 Arthur Nogueira Neves
 
 ;; Author: Arthur Neves
 ;; URL: https://github.com/arthurnn/minitest-emacs
-;; Version: 0.8.0
+;; Version: 0.8.1
 ;; Package-Requires: ((dash "1.0.0"))
 
 ;; This file is NOT part of GNU Emacs.
