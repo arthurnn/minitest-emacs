@@ -43,8 +43,8 @@
   (concat "*Minitest " file-or-dir "*"))
 
 (defun minitest-test-command ()
-   (cond (minitest-use-spring '("spring" "testunit"))
-        ((minitest-zeus-p) "test")
+   (cond (minitest-use-spring '("spring" "rake" "test"))
+        ((minitest-zeus-p) '("zeus" "test"))
         (t '("ruby" "-Ilib:test:spec"))))
 
 (defun minitest-project-root ()
@@ -88,14 +88,13 @@ The current directory is assumed to be the project's root otherwise."
   "Run COMMAND on currently visited file."
   (let ((file-name (buffer-file-name (current-buffer)))
         (bundle '("bundle" "exec"))
-        (command (minitest-test-command))
-        (zeus-command (if (minitest-zeus-p) "zeus" nil)))
+        (command (minitest-test-command)))
     (if file-name
         (minitest--run-command
          (mapconcat 'shell-quote-argument
                     (-flatten
                      (--remove (eq nil it)
-                               (list bundle zeus-command command file-name post-command))) " ")
+                               (list bundle command file-name post-command))) " ")
          file-name)
       (error "Buffer is not visiting a file"))))
 
