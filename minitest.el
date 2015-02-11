@@ -35,7 +35,7 @@
   :group 'minitest)
 
 (defcustom minitest-use-spring nil
-  "Use spring over zues and the default runner"
+  "Use spring over zeus as the default runner"
   :type 'boolean
   :group 'minitest)
 
