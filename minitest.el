@@ -29,14 +29,14 @@
   :type 'boolean
   :group 'minitest)
 
+(defcustom minitest-use-spring nil
+  "Use spring as the default runner"
+  :type 'boolean
+  :group 'minitest)
+
 (defcustom minitest-default-env nil
   "Default env vars for minitest"
   :type 'string
-  :group 'minitest)
-
-(defcustom minitest-use-spring nil
-  "Use spring over zeus as the default runner"
-  :type 'boolean
   :group 'minitest)
 
 (defun minitest-buffer-name (file-or-dir)
