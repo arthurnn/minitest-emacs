@@ -4,7 +4,7 @@
 
 ;; Author: Arthur Neves
 ;; URL: https://github.com/arthurnn/minitest-emacs
-;; Version: 0.9.0
+;; Version: 0.9.1
 ;; Package-Requires: ((dash "1.0.0"))
 
 ;; This file is NOT part of GNU Emacs.
@@ -132,7 +132,7 @@ The current directory is assumed to be the project's root otherwise."
       (let* ((str (match-string 1))
              (post_command (replace-regexp-in-string " " "_" str)))
         (minitest--file-command
-         (format  "-ntest_%s" post_command)))
+         (format  "-n/test_%s/" post_command)))
       (error "No test found. Make sure you are on a file that has `def test_foo` or `test \"foo\"`")))
 
 (defun minitest-rerun ()
