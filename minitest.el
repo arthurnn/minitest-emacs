@@ -49,7 +49,7 @@
 
 (defun minitest-bundler-command ()
   (cond (minitest-use-bundler '("bundle" "exec"))
-        (t '())))
+        (t nil)))
 
 (defun minitest-project-root ()
   "Retrieve the root directory of a project if available.
@@ -117,7 +117,8 @@ The current directory is assumed to be the project's root otherwise."
   (minitest--run-command
     (mapconcat 'shell-quote-argument
                (-flatten
-                 (list (minitest-bundler-command) "rake")) " ")))
+                (--remove (eq nil it)
+                 (list (minitest-bundler-command) "rake"))) " ")))
 
 (defun minitest-verify ()
   "Run on current file."
