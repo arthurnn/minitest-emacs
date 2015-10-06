@@ -26,3 +26,16 @@
      (stub file-relative-name => "foo.rb")
      (mock (minitest--run-command "ruby -Ilib\\:test\\:spec foo.rb" "foo.rb"))
       (minitest--file-command))))
+
+(ert-deftest test-minitest-test-command ()
+  (let ((minitest-use-spring t))
+    (should (equal (minitest-test-command) '("spring" "rake" "test"))))
+  (let ((minitest-use-spring nil))
+    (should (equal (minitest-test-command) '("ruby" "-Ilib:test:spec")))))
+
+(ert-deftest test-minitest-test-command-override ()
+    (with-mock
+     (stub minitest-test-command => '("bin/rails" "test"))
+     (stub file-relative-name => "foo.rb")
+     (mock (minitest--run-command "bundle exec bin/rails test foo.rb" "foo.rb"))
+      (minitest--file-command)))
