@@ -8,4 +8,4 @@
   (let ((minitest-use-zeus-when-possible nil))
     (should (equal (minitest-zeus-p) nil)))
   (let ((minitest-use-zeus-when-possible t))
-    (should-error (minitest-zeus-p))))
+    (should (equal (minitest-zeus-p) nil))))
