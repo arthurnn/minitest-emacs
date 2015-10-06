@@ -47,6 +47,10 @@
         ((minitest-zeus-p) '("zeus" "test"))
         (t '("ruby" "-Ilib:test:spec"))))
 
+(defun minitest-bundler-command ()
+  (cond (minitest-use-bundler '("bundle" "exec"))
+        (t '())))
+
 (defun minitest-project-root ()
   "Retrieve the root directory of a project if available.
 The current directory is assumed to be the project's root otherwise."
@@ -87,7 +91,7 @@ The current directory is assumed to be the project's root otherwise."
 (defun minitest--file-command (&optional post-command)
   "Run COMMAND on currently visited file."
   (let ((file-name (file-relative-name (buffer-file-name) (minitest-project-root)))
-        (bundle '("bundle" "exec"))
+        (bundle (minitest-bundler-command))
         (command (minitest-test-command)))
     (if file-name
         (minitest--run-command
@@ -110,7 +114,10 @@ The current directory is assumed to be the project's root otherwise."
 (defun minitest-verify-all ()
   "Run all tests."
   (interactive)
-  (minitest--run-command "bundle exec rake"))
+  (minitest--run-command
+    (mapconcat 'shell-quote-argument
+               (-flatten
+                 (list (minitest-bundler-command) "rake")) " ")))
 
 (defun minitest-verify ()
   "Run on current file."
