@@ -1,6 +1,7 @@
 # minitest.el
 
 [![Build Status](https://travis-ci.org/arthurnn/minitest-emacs.svg?branch=master)](https://travis-ci.org/arthurnn/minitest-emacs)
+[![MELPA](https://melpa.org/packages/minitest-badge.svg)](https://melpa.org/#/minitest)
 
 A minitest mode for emacs
 
