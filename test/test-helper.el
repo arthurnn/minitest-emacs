@@ -1,5 +1,9 @@
 (require 'f)
 
+(require 'el-mock)
+(eval-when-compile
+    (require 'cl)) ;; for el-mock
+
 (defvar minitest-test/test-path
   (f-parent (f-this-file)))
 

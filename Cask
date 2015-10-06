@@ -4,5 +4,6 @@
 (package-file "minitest.el")
 
 (development
+ (depends-on "f")
  (depends-on "ert-runner")
- (depends-on "f"))
+ (depends-on "el-mock"))
