@@ -9,3 +9,20 @@
     (should (equal (minitest-zeus-p) nil)))
   (let ((minitest-use-zeus-when-possible t))
     (should (equal (minitest-zeus-p) nil))))
+
+(ert-deftest test-minitest-use-bundler-nil ()
+  (let ((minitest-use-bundler nil))
+    (should (equal (minitest-bundler-command) nil))))
+
+(ert-deftest test-minitest-use-bundler-nil-on-verify-all ()
+  (let ((minitest-use-bundler nil))
+    (with-mock
+     (mock (minitest--run-command "rake"))
+      (minitest-verify-all))))
+
+(ert-deftest test-minitest-use-bundler-nil-on-verify-file ()
+  (let ((minitest-use-bundler nil))
+    (with-mock
+     (stub file-relative-name => "foo.rb")
+     (mock (minitest--run-command "ruby -Ilib\\:test\\:spec foo.rb" "foo.rb"))
+      (minitest--file-command))))
