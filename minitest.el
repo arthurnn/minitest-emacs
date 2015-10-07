@@ -4,7 +4,7 @@
 
 ;; Author: Arthur Neves
 ;; URL: https://github.com/arthurnn/minitest-emacs
-;; Version: 0.9.1
+;; Version: 0.9.2
 ;; Package-Requires: ((dash "1.0.0"))
 
 ;; This file is NOT part of GNU Emacs.
@@ -39,13 +39,18 @@
   :type 'string
   :group 'minitest)
 
+(defcustom minitest-default-command '("ruby" "-Ilib:test:spec")
+  "Default command for minitest"
+  :type 'list
+  :group 'minitest)
+
 (defun minitest-buffer-name (file-or-dir)
   (concat "*Minitest " file-or-dir "*"))
 
 (defun minitest-test-command ()
    (cond (minitest-use-spring '("spring" "rake" "test"))
         ((minitest-zeus-p) '("zeus" "test"))
-        (t '("ruby" "-Ilib:test:spec"))))
+        (t minitest-default-command)))
 
 (defun minitest-bundler-command ()
   (cond (minitest-use-bundler '("bundle" "exec"))
