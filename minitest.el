@@ -167,13 +167,13 @@ The current directory is assumed to be the project's root otherwise."
   :group 'minitest
   (if minitest-mode
       (progn
-	(when (boundp 'yas-extra-modes)
-	  (if (fboundp 'yas-activate-extra-mode)
-	      ;; Yasnippet 0.8.1+
-	      (yas-activate-extra-mode 'minitest-mode)
-	    (make-local-variable 'yas-extra-modes)
-	    (add-to-list 'yas-extra-modes 'minitest-mode)
-	    (yas--load-pending-jits)))))
+        (when (boundp 'yas-extra-modes)
+          (if (fboundp 'yas-activate-extra-mode)
+              ;; Yasnippet 0.8.1+
+              (yas-activate-extra-mode 'minitest-mode)
+            (make-local-variable 'yas-extra-modes)
+            (add-to-list 'yas-extra-modes 'minitest-mode)
+            (yas--load-pending-jits)))))
   )
 
 (defvar minitest-snippets-dir
