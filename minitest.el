@@ -107,6 +107,11 @@ The current directory is assumed to be the project's root otherwise."
          file-name)
       (error "Buffer is not visiting a file"))))
 
+(defun minitest--test-name-flag (test-name)
+  (let ((flag (format "-n/test_%s/" test-name)))
+    (cond (minitest-use-spring (concat "TESTOPTS=" flag))
+          (t flag))))
+
 (defun minitest--extract-str ()
   (save-excursion
     (save-restriction
@@ -136,8 +141,7 @@ The current directory is assumed to be the project's root otherwise."
   (if (minitest--extract-str)
       (let* ((str (match-string 1))
              (post_command (replace-regexp-in-string " " "_" str)))
-        (minitest--file-command
-         (format  "-n/test_%s/" post_command)))
+        (minitest--file-command (minitest--test-name-flag post_command)))
       (error "No test found. Make sure you are on a file that has `def test_foo` or `test \"foo\"`")))
 
 (defun minitest-rerun ()
