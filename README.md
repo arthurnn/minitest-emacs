@@ -1,9 +1,17 @@
 # minitest.el
+### A minitest mode for emacs
 
 [![Build Status](https://travis-ci.org/arthurnn/minitest-emacs.svg?branch=master)](https://travis-ci.org/arthurnn/minitest-emacs)
 [![MELPA](https://melpa.org/packages/minitest-badge.svg)](https://melpa.org/#/minitest)
 
-A minitest mode for emacs
+# Usage
+
+Command                                         | Description                                             | Mode binding
+------------------------------------------------|---------------------------------------------------------|--------------------
+<kbd>M-x minitest-verify</kbd>                  | Runs minitest test on the current file                  | `C-c , v`
+<kbd>M-x minitest-verify-single</kbd>           | Runs minitest test on the selected line                 | `C-c , s`
+<kbd>M-x minitest-rerun</kbd>                   | Runs the last test again                                | `C-c , r`
+<kbd>M-x minitest-verify-all</kbd>              | Runs all the tests in the project                       | `C-c , a`
 
 # Installation
 
@@ -32,15 +40,6 @@ the same set of parenthesis.
 ```
 M-x package-install minitest
 ```
-
-# Usage
-
-Command                                         | Description                                             | Mode binding
-------------------------------------------------|---------------------------------------------------------|--------------------
-<kbd>M-x minitest-verify</kbd>                  | Runs minitest test on the current file                  | `C-c , v`
-<kbd>M-x minitest-verify-single</kbd>           | Runs minitest test on the selected line                 | `C-c , s`
-<kbd>M-x minitest-rerun</kbd>                   | Runs the last test again                                | `C-c , r`
-<kbd>M-x minitest-verify-all</kbd>              | Runs all the tests in the project                       | `C-c , a`
 
 # Configuration
 
