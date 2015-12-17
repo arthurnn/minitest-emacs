@@ -9,11 +9,23 @@ A minitest mode for emacs
 
 ## Manual
 
+### Emacs
+
 Just drop `minitest.el`. somewhere in your `load-path`. And:
 ```lisp
 (add-to-list 'load-path "~/emacs.d/vendor")
 (require 'minitest)
 ```
+
+### Spacemacs
+
+Inside your `.spacemacs` dotfile, look for `dotspacemacs-additional-packages` and edit it like so:
+
+```lisp
+dotspacemacs-additional-packages '(minitest)
+```
+Remember that if you already have an additional package there you can add `minitest` after it, within
+the same set of parenthesis.
 
 ## Using [Marmalade](http://marmalade-repo.org/) or [MELPA](http://melpa.milkbox.net/)
 
@@ -30,12 +42,23 @@ Command                                         | Description                   
 <kbd>M-x minitest-rerun</kbd>                   | Runs the last test again                                | `C-c , r`
 <kbd>M-x minitest-verify-all</kbd>              | Runs all the tests in the project                       | `C-c , a`
 
+# Configuration
 
-To enable minitest mode on ruby files:
+To enable minitest mode on ruby files, simply add to your dotfile:
 
 ```lisp
 (add-hook 'ruby-mode-hook 'minitest-mode)
 ```
+
+In case you are using Spacemacs, add the above line to `dotspacemacs/user-config` which is towards the end
+of your `.spacemacs` dotfile:
+
+```lisp
+(defun dotspacemacs/user-config ()
+	(add-hook 'ruby-mode-hook 'minitest-mode))
+```
+If you have another hook already in here make sure to add this hook within its own set of parenthesis so that
+there is only one hook per parenthesis.
 
 ## Snippets
 
