@@ -108,7 +108,7 @@ The current directory is assumed to be the project's root otherwise."
       (error "Buffer is not visiting a file"))))
 
 (defun minitest--test-name-flag (test-name)
-  (let ((flag (format "-n/test_%s/" test-name)))
+  (let ((flag (format "-n/%s/" test-name)))
     (cond (minitest-use-spring (concat "TESTOPTS=" flag))
           (t flag))))
 
@@ -117,9 +117,11 @@ The current directory is assumed to be the project's root otherwise."
     (save-restriction
       (widen)
       (end-of-line)
-      (or (re-search-backward "test '\\([^\"]+?\\)'" nil t)
-          (re-search-backward "test \"\\([^\"]+?\\)\"" nil t)
-          (re-search-backward "def test_\\([_A-Za-z0-9]+\\)" nil t)))))
+      (or (re-search-backward "\\(test\\) '\\([^\"]+?\\)'" nil t)
+          (re-search-backward "\\(test\\) \"\\([^\"]+?\\)\"" nil t)
+          (re-search-backward "def \\(test\\)_\\([_A-Za-z0-9]+\\)" nil t)
+          (re-search-backward "\\(it\\) '\\([^\"]+?\\)'" nil t)
+          (re-search-backward "\\(it\\) \"\\([^\"]+?\\)\"" nil t)))))
 
 (defun minitest-verify-all ()
   "Run all tests."
@@ -139,10 +141,12 @@ The current directory is assumed to be the project's root otherwise."
   "Run on current file."
   (interactive)
   (if (minitest--extract-str)
-      (let* ((str (match-string 1))
-             (post_command (replace-regexp-in-string " " "_" str)))
+      (let* ((cmd (match-string 1))
+             (str (match-string 2))
+             (post_command (cond ((equal "test" cmd) (format "test_%s" (replace-regexp-in-string " " "_" str)))
+                                 ((equal "it" cmd) str))))
         (minitest--file-command (minitest--test-name-flag post_command)))
-      (error "No test found. Make sure you are on a file that has `def test_foo` or `test \"foo\"`")))
+    (error "No test found. Make sure you are on a file that has `def test_foo` or `test \"foo\"`")))
 
 (defun minitest-rerun ()
   "Run the last command"
