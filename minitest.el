@@ -95,16 +95,9 @@ The current directory is assumed to be the project's root otherwise."
 
 (defun minitest--file-command (&optional post-command)
   "Run COMMAND on currently visited file."
-  (let ((file-name (file-relative-name (buffer-file-name) (minitest-project-root)))
-        (bundle (minitest-bundler-command))
-        (command (minitest-test-command)))
+  (let ((file-name (file-relative-name (buffer-file-name) (minitest-project-root))))
     (if file-name
-        (minitest--run-command
-         (mapconcat 'shell-quote-argument
-                    (-flatten
-                     (--remove (eq nil it)
-                               (list bundle command file-name post-command))) " ")
-         file-name)
+	(minitest-run-file file-name)
       (error "Buffer is not visiting a file"))))
 
 (defun minitest--test-name-flag (test-name)
@@ -154,6 +147,17 @@ The current directory is assumed to be the project's root otherwise."
   (if minitest--last-command
       (apply #'minitest--run-command minitest--last-command)
     (error "There is no previous command to run")))
+
+(defun minitest-run-file (file-name &optional post-command)
+  "Run the given file"
+  (let ((bundle (minitest-bundler-command))
+        (command (minitest-test-command)))
+    (minitest--run-command
+     (mapconcat 'shell-quote-argument
+		(-flatten
+		 (--remove (eq nil it)
+			   (list bundle command file-name post-command))) " ")
+     file-name)))
 
 ;;; Minor mode
 (defvar minitest-mode-map
