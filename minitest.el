@@ -97,7 +97,7 @@ The current directory is assumed to be the project's root otherwise."
   "Run COMMAND on currently visited file."
   (let ((file-name (file-relative-name (buffer-file-name) (minitest-project-root))))
     (if file-name
-	(minitest-run-file file-name)
+	(minitest-run-file file-name post-command)
       (error "Buffer is not visiting a file"))))
 
 (defun minitest--test-name-flag (test-name)
