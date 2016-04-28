@@ -110,8 +110,7 @@ The current directory is assumed to be the project's root otherwise."
     (save-restriction
       (widen)
       (end-of-line)
-      (or (re-search-backward "\\(test\\) '\\([^\"]+?\\)'" nil t)
-          (re-search-backward "\\(test\\) \"\\([^\"]+?\\)\"" nil t)
+      (or (re-search-backward "\\(test\\) ['\"]\\([^\"]+?\\)['\"]" nil t)
           (re-search-backward "def \\(test\\)_\\([_A-Za-z0-9]+\\)" nil t)
           (re-search-backward "\\(it\\) '\\([^\"]+?\\)'" nil t)
           (re-search-backward "\\(it\\) \"\\([^\"]+?\\)\"" nil t)))))
