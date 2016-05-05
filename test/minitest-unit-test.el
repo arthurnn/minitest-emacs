@@ -39,3 +39,35 @@
      (stub file-relative-name => "foo.rb")
      (mock (minitest--run-command "bundle exec bin/rails test foo.rb" "foo.rb"))
       (minitest--file-command)))
+
+(ert-deftest test-minitest-test-extract-str-with-method ()
+  (with-temp-buffer
+    (insert "def test_hello\nend")
+    (goto-char (point-max))
+    (minitest--extract-str)
+    (should (equal (match-string 2) "hello"))))
+
+(ert-deftest test-minitest-test-extract-str-with-block ()
+  (with-temp-buffer
+    (insert "test \"hello\" do\nend")
+    (goto-char (point-max))
+    (minitest--extract-str)
+    (should (equal (match-string 2) "hello")))
+  (with-temp-buffer
+    (insert "test \"foo\" do\nend\ntest \'bar\' do\nend")
+    (goto-char (point-max))
+    (minitest--extract-str)
+    (should (equal (match-string 2) "bar")))
+  (with-temp-buffer
+    (insert "test \'foo\' do\nend\ntest \"bar\" do\nend")
+    (goto-char (point-max))
+    (minitest--extract-str)
+    (should (equal (match-string 2) "bar"))))
+
+;; TODO
+;;(ert-deftest test-minitest-test-extract-str-with-block-and-method ()
+;;  (with-temp-buffer
+;;    (insert "test \"foo\" do\nend\ndef test_bar\nend")
+;;    (goto-char (point-max))
+;;    (minitest--extract-str)
+;;    (should (equal (match-string 2) "bar"))))
