@@ -135,7 +135,7 @@ The current directory is assumed to be the project's root otherwise."
   (if (minitest--extract-str)
       (let* ((cmd (match-string 1))
              (str (match-string 2))
-             (post_command (cond ((equal "test" cmd) (format "test_%s" (replace-regexp-in-string " " "_" str)))
+             (post_command (cond ((equal "test" cmd) (format "test_%s" (replace-regexp-in-string "[\s#:]" "_" str)))
                                  ((equal "it" cmd) str))))
         (minitest--file-command (minitest--test-name-flag post_command)))
     (error "No test found. Make sure you are on a file that has `def test_foo` or `test \"foo\"`")))
