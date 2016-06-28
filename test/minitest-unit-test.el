@@ -47,6 +47,12 @@
     (minitest--extract-str)
     (should (equal (match-string 2) "hello"))))
 
+(ert-deftest test-minitest--post-command ()
+  (defvar test-description "#method_name behavior of Module::Class")
+  (defvar method-name "_method_name_behavior_of_Module__Class")
+  (should (equal method-name (minitest--post-command "test" test-description)))
+  (should (equal method-name (minitest--post-command "it" test-description))))
+
 (ert-deftest test-minitest-test-extract-str-with-block ()
   (with-temp-buffer
     (insert "test \"hello\" do\nend")
