@@ -1,3 +1,9 @@
+;;; test-helper.el --- for running minitest-emacs test suite
+
+;;; Commentary:
+
+;;; Code:
+
 (require 'f)
 
 (require 'el-mock)
@@ -14,3 +20,6 @@
   (require 'ert (f-expand "minitest" minitest-test/test-path)))
 
 (require 'minitest (f-expand "minitest" minitest-test/root-path))
+
+(provide 'test-helper)
+;;; test-helper.el ends here
