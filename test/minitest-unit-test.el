@@ -4,8 +4,6 @@
 
 ;;; Code:
 
-(require 'test-helper)
-
 (ert-deftest test-minitest-buffer-name ()
   (let ((filename nil))
     (should (equal (minitest-buffer-name filename) "*Minitest *")))

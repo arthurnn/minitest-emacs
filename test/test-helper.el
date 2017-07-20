@@ -21,5 +21,4 @@
 
 (require 'minitest (f-expand "minitest" minitest-test/root-path))
 
-(provide 'test-helper)
 ;;; test-helper.el ends here
