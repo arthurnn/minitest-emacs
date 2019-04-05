@@ -64,12 +64,17 @@
   :type 'list
   :group 'minitest)
 
+(defcustom minitest-spring-command '("spring" "rake" "test")
+  "Spring command for minitest"
+  :type 'list
+  :group 'minitest)
+
 (defun minitest-buffer-name (file-or-dir)
   (concat "*Minitest " file-or-dir "*"))
 
 (defun minitest-test-command ()
-  (let ((command (cond (minitest-use-spring '("spring" "rake" "test"))
-                       ((minitest-zeus-p) '("zeus" "test"))
+  (let ((command (cond (minitest-use-spring minitest-spring-command)
+        ((minitest-zeus-p) '("zeus" "test"))
                        (minitest-use-rails '("bin/rails" "test"))
                        (t minitest-default-command))))
     (if minitest-use-docker (append minitest-docker-command (list minitest-docker-container) command)
