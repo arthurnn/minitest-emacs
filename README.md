@@ -59,6 +59,19 @@ of your `.spacemacs` dotfile:
 If you have another hook already in here make sure to add this hook within its own set of parenthesis so that
 there is only one hook per parenthesis.
 
+## Rails
+
+If you are working on a Rails project, you can set `minitest-use-rails` to true in order to use the `bin/rails test`
+command when running examples.
+
+## Docker
+
+You can run tests inside a Docker container by setting `minitest-use-docker` to
+true and `minitest-docker-container` to the name of the container. By default this
+will use the command `docker-compose exec` to run the minitest command, which assumes
+you already have the specified container running. To customize the command, edit the
+`minitest-docker-command` variable.
+
 ## Snippets
 
 If you hava yasnippet installed, you can load the snippets:

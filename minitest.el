@@ -34,6 +34,26 @@
   :type 'boolean
   :group 'minitest)
 
+(defcustom minitest-use-rails nil
+  "Use `bin/rails test' as the default runner"
+  :type 'boolean
+  :group 'minitest)
+
+(defcustom minitest-use-docker nil
+  "Execute test command inside `minitest-docker-container' with `minitest-docker-command`'"
+  :type 'boolean
+  :group 'minitest)
+
+(defcustom minitest-docker-command '("docker-compose" "exec")
+  "Command to execute tests with docker"
+  :type 'list
+  :group 'minitest)
+
+(defcustom minitest-docker-container nil
+  "Specify the name of the docker container to target"
+  :type 'string
+  :group 'minitest)
+
 (defcustom minitest-default-env nil
   "Default env vars for minitest"
   :type 'string
@@ -48,9 +68,12 @@
   (concat "*Minitest " file-or-dir "*"))
 
 (defun minitest-test-command ()
-   (cond (minitest-use-spring '("spring" "rake" "test"))
-        ((minitest-zeus-p) '("zeus" "test"))
-        (t minitest-default-command)))
+  (let ((command (cond (minitest-use-spring '("spring" "rake" "test"))
+                       ((minitest-zeus-p) '("zeus" "test"))
+                       (minitest-use-rails '("bin/rails" "test"))
+                       (t minitest-default-command))))
+    (if minitest-use-docker (append minitest-docker-command (list minitest-docker-container) command)
+      command)))
 
 (defun minitest-bundler-command ()
   (cond (minitest-use-bundler '("bundle" "exec"))
