@@ -61,7 +61,7 @@ there is only one hook per parenthesis.
 
 ## Snippets
 
-If you hava yasnippet installed, you can load the snippets:
+If you have yasnippet installed, you can load the snippets:
 ```lisp
 (eval-after-load 'minitest
   '(minitest-install-snippets))
