@@ -27,13 +27,20 @@ Just drop `minitest.el`. somewhere in your `load-path`. And:
 
 ### Spacemacs
 
-Inside your `.spacemacs` dotfile, look for `dotspacemacs-additional-packages` and edit it like so:
+The Spacemacs Ruby layer supports minitest-emacs as one of its configurable test runners.
+To set the default Ruby test runner to use this package, edit the `ruby` layer entry in
+the `dotspacemacs-configuration-layers` list defined in your `.spacemacs` file:
 
 ```lisp
-dotspacemacs-additional-packages '(minitest)
+dotspacemacs-configuration-layers
+'(
+  (ruby :variables
+        ruby-test-runner 'minitest)
+)
+
 ```
-Remember that if you already have an additional package there you can add `minitest` after it, within
-the same set of parenthesis.
+
+See the Spacemacs Ruby layer documentation for more info.
 
 ## Using [Marmalade](http://marmalade-repo.org/) or [MELPA](http://melpa.milkbox.net/)
 
