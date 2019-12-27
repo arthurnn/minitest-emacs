@@ -35,7 +35,7 @@
 
 (ert-deftest test-minitest-test-command ()
   (let ((minitest-use-spring t))
-    (should (equal (minitest-test-command) (minitest-spring-command))))
+    (should (equal (minitest-test-command) minitest-spring-command)))
   (let ((minitest-use-docker t)
         (minitest-docker-container "app")
         (minitest-use-rails t))
