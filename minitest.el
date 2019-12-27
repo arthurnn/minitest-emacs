@@ -75,8 +75,8 @@
 (defun minitest-test-command ()
   (let ((command (cond (minitest-use-spring minitest-spring-command)
         ((minitest-zeus-p) '("zeus" "test"))
-                       (minitest-use-rails '("bin/rails" "test"))
-                       (t minitest-default-command))))
+        (minitest-use-rails '("bin/rails" "test"))
+        (t minitest-default-command))))
     (if minitest-use-docker (append minitest-docker-command (list minitest-docker-container) command)
       command)))
 
