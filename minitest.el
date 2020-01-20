@@ -168,7 +168,7 @@ The current directory is assumed to be the project's root otherwise."
     (error "No test found. Make sure you are on a file that has `def test_foo` or `test \"foo\"`")))
 
 (defun minitest--post-command (cmd str)
-  (format "%s" (replace-regexp-in-string "[\s#:]" "_" str)))
+  (format "%s" (replace-regexp-in-string "[\s]" "_" str)))
 
 (defun minitest-rerun ()
   "Run the last command"
