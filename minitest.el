@@ -133,15 +133,31 @@ The current directory is assumed to be the project's root otherwise."
     (cond (minitest-use-spring (concat "TESTOPTS=" flag))
           (t flag))))
 
-(defun minitest--extract-str ()
+(defvar minitest--test-regexps
+  '("\\(test\\) ['\"]\\([^\"]+?\\)['\"]"
+    "def \\(test\\)_\\([_A-Za-z0-9]+\\)"
+    "\\(it\\) \"\\([^\"]+?\\)\""
+    "\\(it\\) '\\([^\"]+?\\)'")
+  "List of regular expressions for minitest test definition patterns.")
+
+(defun minitest--match-point (re)
+  "Searches for a regular expression backwards from end of the current line.
+Sets the match-string and returns the location of point where the match begins or nil"
   (save-excursion
     (save-restriction
       (widen)
       (end-of-line)
-      (or (re-search-backward "\\(test\\) ['\"]\\([^\"]+?\\)['\"]" nil t)
-          (re-search-backward "def \\(test\\)_\\([_A-Za-z0-9]+\\)" nil t)
-          (re-search-backward "\\(it\\) '\\([^\"]+?\\)'" nil t)
-          (re-search-backward "\\(it\\) \"\\([^\"]+?\\)\"" nil t)))))
+      (re-search-backward re nil t))))
+
+(defun minitest--extract-test-name ()
+  "Finds the nearest test name matching one of the `minitest--test-regexps'.
+Returns a string or nil."
+  (let* ((matches (delete nil (mapcar 'minitest--match-point minitest--test-regexps)))
+         (distances (mapcar (lambda (pos) (- (point) pos)) matches)))
+    (if distances
+        (let ((closest (cl-position (apply 'min distances) distances)))
+          (minitest--match-point (nth closest minitest--test-regexps))
+          (match-string 2)))))
 
 (defun minitest-verify-all ()
   "Run all tests."
@@ -160,14 +176,12 @@ The current directory is assumed to be the project's root otherwise."
 (defun minitest-verify-single ()
   "Run on current file."
   (interactive)
-  (if (minitest--extract-str)
-      (let* ((cmd (match-string 1))
-             (str (match-string 2))
-             (post_command (minitest--post-command cmd str)))
-        (minitest--file-command (minitest--test-name-flag post_command)))
-    (error "No test found. Make sure you are on a file that has `def test_foo` or `test \"foo\"`")))
+  (let ((test-name (minitest--extract-test-name)))
+    (if test-name
+        (minitest--file-command (minitest--test-name-flag (minitest--post-command test-name)))
+      (error "No test found. Make sure you are on a file that has `def test_foo` or `test \"foo\"`"))))
 
-(defun minitest--post-command (cmd str)
+(defun minitest--post-command (str)
   (format "%s" (replace-regexp-in-string "[\s#:]" "_" str)))
 
 (defun minitest-rerun ()

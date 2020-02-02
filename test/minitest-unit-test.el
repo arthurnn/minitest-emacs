@@ -56,40 +56,35 @@
      (mock (minitest--run-command "bundle exec bin/rails test foo.rb" "foo.rb"))
       (minitest--file-command)))
 
-(ert-deftest test-minitest-test-extract-str-with-method ()
+(ert-deftest test-minitest--post-command ()
+  (defvar test-name "#method_name behavior of Module::Class")
+  (defvar method-name "_method_name_behavior_of_Module__Class")
+  (should (equal method-name (minitest--post-command test-name)))
+  (should (equal method-name (minitest--post-command test-name))))
+
+(ert-deftest test-minitest--extract-test-name ()
+  "Tests extracting the test name for verify single command."
+  ;; standard minitest method
   (with-temp-buffer
     (insert "def test_hello\nend")
     (goto-char (point-max))
-    (minitest--extract-str)
-    (should (equal (match-string 2) "hello"))))
-
-(ert-deftest test-minitest--post-command ()
-  (defvar test-description "#method_name behavior of Module::Class")
-  (defvar method-name "_method_name_behavior_of_Module__Class")
-  (should (equal method-name (minitest--post-command "test" test-description)))
-  (should (equal method-name (minitest--post-command "it" test-description))))
-
-(ert-deftest test-minitest-test-extract-str-with-block ()
+    (should (equal (minitest--extract-test-name) "hello")))
+  ;; rails minitest style
   (with-temp-buffer
     (insert "test \"hello\" do\nend")
     (goto-char (point-max))
-    (minitest--extract-str)
-    (should (equal (match-string 2) "hello")))
+    (should (equal (minitest--extract-test-name) "hello")))
+  ;; different quote styles in the same file
   (with-temp-buffer
     (insert "test \"foo\" do\nend\ntest \'bar\' do\nend")
     (goto-char (point-max))
-    (minitest--extract-str)
-    (should (equal (match-string 2) "bar")))
+    (should (equal (minitest--extract-test-name) "bar")))
   (with-temp-buffer
     (insert "test \'foo\' do\nend\ntest \"bar\" do\nend")
     (goto-char (point-max))
-    (minitest--extract-str)
-    (should (equal (match-string 2) "bar"))))
-
-;; TODO
-;;(ert-deftest test-minitest-test-extract-str-with-block-and-method ()
-;;  (with-temp-buffer
-;;    (insert "test \"foo\" do\nend\ndef test_bar\nend")
-;;    (goto-char (point-max))
-;;    (minitest--extract-str)
-;;    (should (equal (match-string 2) "bar"))))
+    (should (equal (minitest--extract-test-name) "bar")))
+  ;; with different test styles in the same buffer.
+  (with-temp-buffer
+    (insert "test \"foo\" do\nend\n\ndef test_bar\nend\nit 'is rad'\nend\nit \"is cool\"")
+    (goto-char (point-max))
+    (should (equal (minitest--extract-test-name) "is cool"))))
