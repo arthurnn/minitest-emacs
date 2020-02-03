@@ -57,34 +57,34 @@
       (minitest--file-command)))
 
 (ert-deftest test-minitest--post-command ()
-  (defvar test-name "#method_name behavior of Module::Class")
-  (defvar method-name "_method_name_behavior_of_Module__Class")
-  (should (equal method-name (minitest--post-command test-name)))
-  (should (equal method-name (minitest--post-command test-name))))
+  (let ((original-test-name "#method_name behavior of Module::Class")
+        (cli-output "_method_name_behavior_of_Module__Class"))
+    (should (equal cli-output (minitest--post-command `("test" . ,original-test-name))))
+    (should (equal original-test-name (minitest--post-command `("it" . ,original-test-name))))))
 
-(ert-deftest test-minitest--extract-test-name ()
+(ert-deftest test-minitest--extract-test ()
   "Tests extracting the test name for verify single command."
   ;; standard minitest method
   (with-temp-buffer
     (insert "def test_hello\nend")
     (goto-char (point-max))
-    (should (equal (minitest--extract-test-name) "hello")))
+    (should (equal (minitest--extract-test) '("test" . "hello"))))
   ;; rails minitest style
   (with-temp-buffer
     (insert "test \"hello\" do\nend")
     (goto-char (point-max))
-    (should (equal (minitest--extract-test-name) "hello")))
+    (should (equal (minitest--extract-test) '("test" . "hello"))))
   ;; different quote styles in the same file
   (with-temp-buffer
     (insert "test \"foo\" do\nend\ntest \'bar\' do\nend")
     (goto-char (point-max))
-    (should (equal (minitest--extract-test-name) "bar")))
+    (should (equal (minitest--extract-test) '("test" . "bar"))))
   (with-temp-buffer
-    (insert "test \'foo\' do\nend\ntest \"bar\" do\nend")
+    (insert "test \'foo\' {}\nend\ntest \"bar\" do\nend")
     (goto-char (point-max))
-    (should (equal (minitest--extract-test-name) "bar")))
+    (should (equal (minitest--extract-test) '("test" . "bar"))))
   ;; with different test styles in the same buffer.
   (with-temp-buffer
     (insert "test \"foo\" do\nend\n\ndef test_bar\nend\nit 'is rad'\nend\nit \"is cool\"")
     (goto-char (point-max))
-    (should (equal (minitest--extract-test-name) "is cool"))))
+    (should (equal (minitest--extract-test) '("it" . "is cool")))))

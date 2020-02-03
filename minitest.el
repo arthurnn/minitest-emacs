@@ -142,22 +142,22 @@ The current directory is assumed to be the project's root otherwise."
 
 (defun minitest--match-point (re)
   "Searches for a regular expression backwards from end of the current line.
-Sets the match-string and returns the location of point where the match begins or nil"
+Sets the match-string and returns the location of point where the match begins or nil."
   (save-excursion
     (save-restriction
       (widen)
       (end-of-line)
       (re-search-backward re nil t))))
 
-(defun minitest--extract-test-name ()
+(defun minitest--extract-test ()
   "Finds the nearest test name matching one of the `minitest--test-regexps'.
-Returns a string or nil."
+Returns a (CMD . NAME) pair or nil."
   (let* ((matches (delete nil (mapcar 'minitest--match-point minitest--test-regexps)))
          (distances (mapcar (lambda (pos) (- (point) pos)) matches)))
     (if distances
         (let ((closest (cl-position (apply 'min distances) distances)))
           (minitest--match-point (nth closest minitest--test-regexps))
-          (match-string 2)))))
+          `(,(match-string 1) . ,(match-string 2))))))
 
 (defun minitest-verify-all ()
   "Run all tests."
@@ -174,15 +174,18 @@ Returns a string or nil."
   (minitest--file-command))
 
 (defun minitest-verify-single ()
-  "Run on current file."
+  "Run the test closest to the cursor, searching backwards."
   (interactive)
-  (let ((test-name (minitest--extract-test-name)))
-    (if test-name
-        (minitest--file-command (minitest--test-name-flag (minitest--post-command test-name)))
+  (let ((test (minitest--extract-test)))
+    (if test
+        (minitest--file-command (minitest--test-name-flag (minitest--post-command test)))
       (error "No test found. Make sure you are on a file that has `def test_foo` or `test \"foo\"`"))))
 
-(defun minitest--post-command (str)
-  (format "%s" (replace-regexp-in-string "[\s#:]" "_" str)))
+(defun minitest--post-command (test)
+  (let ((name (cdr test)))
+    (if (string= (car test) "it")
+        name
+      (format "%s" (replace-regexp-in-string "[\s#:]" "_" name)))))
 
 (defun minitest-rerun ()
   "Run the last command"
