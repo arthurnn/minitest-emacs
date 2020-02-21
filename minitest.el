@@ -35,12 +35,13 @@
   :group 'minitest)
 
 (defcustom minitest-use-rails nil
-  "Use `bin/rails test' as the default runner"
+  "Use `bin/rails test' as the default runner.
+This is intended for use with Rails versions 5+."
   :type 'boolean
   :group 'minitest)
 
 (defcustom minitest-use-docker nil
-  "Execute test command inside `minitest-docker-container' with `minitest-docker-command`'"
+  "Execute test command inside `minitest-docker-container' with `minitest-docker-command'"
   :type 'boolean
   :group 'minitest)
 
@@ -159,6 +160,18 @@ Returns a (CMD . NAME) pair or nil."
           (minitest--match-point (nth closest minitest--test-regexps))
           `(,(match-string 1) . ,(match-string 2))))))
 
+(defun minitest--verify-single-with-regex ()
+  (let ((test (minitest--extract-test)))
+    (if test
+        (minitest--file-command (minitest--test-name-flag (minitest--post-command test)))
+      (error "No test found. Make sure you are on a file that has `def test_foo` or `test \"foo\"`"))))
+
+(defun minitest--verify-single-rails ()
+  "Runs `bin/rails test path/to/test_file.rb:NN' with the current line number."
+  (let ((line-number (line-number-at-pos (point)))
+        (file-name (file-relative-name (buffer-file-name) (minitest-project-root))))
+    (minitest-run-file (format "%s:%s" file-name line-number))))
+
 (defun minitest-verify-all ()
   "Run all tests."
   (interactive)
@@ -176,10 +189,8 @@ Returns a (CMD . NAME) pair or nil."
 (defun minitest-verify-single ()
   "Run the test closest to the cursor, searching backwards."
   (interactive)
-  (let ((test (minitest--extract-test)))
-    (if test
-        (minitest--file-command (minitest--test-name-flag (minitest--post-command test)))
-      (error "No test found. Make sure you are on a file that has `def test_foo` or `test \"foo\"`"))))
+  (if minitest-use-rails (minitest--verify-single-rails)
+    (minitest--verify-with-regex)))
 
 (defun minitest--post-command (test)
   (let ((name (cdr test)))
