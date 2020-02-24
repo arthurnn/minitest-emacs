@@ -190,7 +190,7 @@ Returns a (CMD . NAME) pair or nil."
   "Run the test closest to the cursor, searching backwards."
   (interactive)
   (if minitest-use-rails (minitest--verify-single-rails)
-    (minitest--verify-with-regex)))
+    (minitest--verify-single-with-regex)))
 
 (defun minitest--post-command (test)
   (let ((name (cdr test)))
