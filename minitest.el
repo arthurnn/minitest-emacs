@@ -114,7 +114,6 @@ The current directory is assumed to be the project's root otherwise."
       (rvm-activate-corresponding-ruby))
 
   (let ((default-directory (minitest-project-root))
-        (compilation-scroll-output t)
         (actual-command (concat (or minitest-default-env "") " " command)))
     (setq minitest--last-command (list command file-name))
     (compilation-start
