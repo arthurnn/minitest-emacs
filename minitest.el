@@ -4,10 +4,14 @@
 
 ;; Author: Arthur Neves
 ;; URL: https://github.com/arthurnn/minitest-emacs
-;; Version: 0.9.2
+;; Version: 0.10.0
 ;; Package-Requires: ((dash "1.0.0"))
 
 ;; This file is NOT part of GNU Emacs.
+
+;;; Change Log:
+
+;; 0.10.0 - No longer explicitly set compilation-scroll-output
 
 ;;; Code:
 
@@ -114,7 +118,6 @@ The current directory is assumed to be the project's root otherwise."
       (rvm-activate-corresponding-ruby))
 
   (let ((default-directory (minitest-project-root))
-        (compilation-scroll-output t)
         (actual-command (concat (or minitest-default-env "") " " command)))
     (setq minitest--last-command (list command file-name))
     (compilation-start
