@@ -87,6 +87,16 @@ If you have yasnippet installed, you can load the snippets:
   '(minitest-install-snippets))
 ```
 
+## Scroll Position
+
+The `compilation-scroll-output` variable, when set to `t`, scrolls to the bottom
+of the test output. When set to `nil`, the test output buffer stays scrolled to
+the top.
+
+Before version 0.10.0, this variable was set to `t` before running tests, but
+after version 0.10.0 it is not set explicitly anymore. In order to get back the
+old behavior, just set `compilation-scroll-output` to `t` yourself.
+
 ## License
 
 The MIT License (MIT)
