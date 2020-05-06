@@ -4,10 +4,14 @@
 
 ;; Author: Arthur Neves
 ;; URL: https://github.com/arthurnn/minitest-emacs
-;; Version: 0.9.2
+;; Version: 0.10.0
 ;; Package-Requires: ((dash "1.0.0"))
 
 ;; This file is NOT part of GNU Emacs.
+
+;;; Change Log:
+
+;; 0.10.0 - No longer explicitly set compilation-scroll-output
 
 ;;; Code:
 
