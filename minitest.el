@@ -227,6 +227,7 @@ Returns a (CMD . NAME) pair or nil."
       (define-key prefix-map (kbd "v") 'minitest-verify)
       (define-key prefix-map (kbd "s") 'minitest-verify-single)
       (define-key prefix-map (kbd "r") 'minitest-rerun)
+      (define-key prefix-map (kbd "t") 'minitest-toggle-test-and-target)
       (define-key map minitest-keymap-prefix prefix-map))
     map)
   "Keymap for minitest-mode.")
