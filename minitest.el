@@ -24,7 +24,7 @@
   :type 'string)
 
 (defcustom minitest-use-zeus-when-possible t
-  "When t and .zeus.sock is present, run specs with 'zeus'."
+  "When t and .zeus.sock is present, run tests with 'zeus'."
   :type 'boolean
   :group 'minitest)
 
@@ -71,6 +71,16 @@ This is intended for use with Rails versions 5+."
 
 (defcustom minitest-spring-command '("spring" "rake" "test")
   "Spring command for minitest"
+  :type 'list
+  :group 'minitest)
+
+(defcustom minitest-test-directory-name "test"
+  "The folder name within `minitest-project-root' that holds the tests"
+  :type 'string
+  :group 'minitest)
+
+(defcustom minitest-source-directory-names '("app" "lib")
+  "The folder names within `minitest-project-root' that hold the source code"
   :type 'list
   :group 'minitest)
 
@@ -227,6 +237,7 @@ Returns a (CMD . NAME) pair or nil."
       (define-key prefix-map (kbd "v") 'minitest-verify)
       (define-key prefix-map (kbd "s") 'minitest-verify-single)
       (define-key prefix-map (kbd "r") 'minitest-rerun)
+      (define-key prefix-map (kbd "t") 'minitest-toggle-test-and-target)
       (define-key map minitest-keymap-prefix prefix-map))
     map)
   "Keymap for minitest-mode.")
@@ -273,6 +284,63 @@ Returns a (CMD . NAME) pair or nil."
   "Return true if the current buffer is a test."
   (and (buffer-file-name)
        (minitest-test-file-p (buffer-file-name))))
+
+;;;###autoload
+(defun minitest-toggle-test-and-target ()
+  "Switch to the test or the target file for the current buffer.
+If the current buffer is visiting a test file, switches to the
+target, otherwise the test."
+  (interactive)
+  (find-file (minitest--test-or-target)))
+
+(defun minitest--test-or-target ()
+  (if (minitest-buffer-is-test-p)
+      (minitest--target-file-for (buffer-file-name))
+    (minitest--test-file-for (buffer-file-name))))
+
+(defun minitest--test-file-for (a-file-name)
+  "Find test for the specified file."
+  (if (minitest-test-file-p a-file-name)
+      a-file-name
+    (let* ((replace-regex "^\\.\\./[^/]+/")
+           (test-directory (concat (minitest-project-root) minitest-test-directory-name))
+           (relative-file-name (file-relative-name a-file-name test-directory)))
+      (minitest--testize-file-name (expand-file-name (replace-regexp-in-string replace-regex "" relative-file-name)
+                                                    test-directory)))))
+
+(defun minitest--target-file-for (a-test-file-name)
+  "Find the target for A-TEST-FILE-NAME."
+  (cl-loop for extension in (list "rb" "rake")
+           for candidate = (minitest--targetize-file-name a-test-file-name
+                                                         extension)
+           for filename = (cl-loop for dir in (cons "." minitest-source-directory-names)
+                                   for target = (replace-regexp-in-string
+                                                 (concat "/" minitest-test-directory-name "/")
+                                                 (concat "/" dir "/")
+                                                 candidate)
+                                   if (file-exists-p target)
+                                   return target)
+           if filename
+           return filename))
+
+(defun minitest--testize-file-name (a-file-name)
+  "Return A-FILE-NAME but converted in to a test file name."
+  (concat
+   (file-name-directory a-file-name)
+   (replace-regexp-in-string "\\(\\.\\(rb\\|rake\\)\\)?$" "_test.rb" (file-name-nondirectory a-file-name))))
+
+(defun minitest--targetize-file-name (a-file-name extension)
+  "Return A-FILE-NAME but converted into a non-test file name with EXTENSION."
+  (concat (file-name-directory a-file-name)
+          (minitest--file-name-with-default-extension
+           (replace-regexp-in-string "_test\\.rb" (concat "." extension)
+                                     (file-name-nondirectory a-file-name)))))
+
+(defun minitest--file-name-with-default-extension (a-file-name)
+  "Add .rb file extension to A-FILE-NAME if it does not already have an extension."
+  (if (file-name-extension a-file-name)
+      a-file-name ;; file has a extension already so do nothing
+    (concat a-file-name ".rb")))
 
 ;;;###autoload
 (defun minitest-enable-appropriate-mode ()
