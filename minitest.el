@@ -74,6 +74,16 @@ This is intended for use with Rails versions 5+."
   :type 'list
   :group 'minitest)
 
+(defcustom minitest-test-directory-name "test"
+  "The folder name within `minitest-project-root' that holds the tests"
+  :type 'string
+  :group 'minitest)
+
+(defcustom minitest-source-directory-names '("app" "lib")
+  "The folder names within `minitest-project-root' that hold the source code"
+  :type 'list
+  :group 'minitest)
+
 (defun minitest-buffer-name (file-or-dir)
   (concat "*Minitest " file-or-dir "*"))
 
@@ -293,7 +303,7 @@ target, otherwise the test."
   (if (minitest-test-file-p a-file-name)
       a-file-name
     (let* ((replace-regex "^\\.\\./[^/]+/")
-           (test-directory (concat (minitest-project-root) "test"))
+           (test-directory (concat (minitest-project-root) minitest-test-directory-name))
            (relative-file-name (file-relative-name a-file-name test-directory)))
       (minitest--testize-file-name (expand-file-name (replace-regexp-in-string replace-regex "" relative-file-name)
                                                     test-directory)))))
@@ -303,7 +313,7 @@ target, otherwise the test."
   (cl-loop for extension in (list "rb" "rake")
            for candidate = (minitest--targetize-file-name a-test-file-name
                                                          extension)
-           for filename = (cl-loop for dir in (cons "." '("app" "lib"))
+           for filename = (cl-loop for dir in (cons "." minitest-source-directory-names)
                                    for target = (replace-regexp-in-string
                                                  "/test/"
                                                  (concat "/" dir "/")
