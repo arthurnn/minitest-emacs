@@ -315,7 +315,7 @@ target, otherwise the test."
                                                          extension)
            for filename = (cl-loop for dir in (cons "." minitest-source-directory-names)
                                    for target = (replace-regexp-in-string
-                                                 "/test/"
+                                                 (concat "/" minitest-test-directory-name "/")
                                                  (concat "/" dir "/")
                                                  candidate)
                                    if (file-exists-p target)
