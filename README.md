@@ -1,7 +1,6 @@
 # minitest.el
 ### A minitest mode for emacs
 
-[![Build Status](https://travis-ci.org/arthurnn/minitest-emacs.svg?branch=master)](https://travis-ci.org/arthurnn/minitest-emacs)
 [![MELPA](https://melpa.org/packages/minitest-badge.svg)](https://melpa.org/#/minitest)
 
 # Usage
@@ -96,4 +95,3 @@ the top.
 Before version 0.10.0, this variable was set to `t` before running tests, but
 after version 0.10.0 it is not set explicitly anymore. In order to get back the
 old behavior, just set `compilation-scroll-output` to `t` yourself.
-
