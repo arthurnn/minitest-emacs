@@ -43,12 +43,12 @@
   :group 'minitest)
 
 (defcustom minitest-use-bundler t
-  "minitest mode should use bundler?"
+  "Minitest mode should use bundler?"
   :type 'boolean
   :group 'minitest)
 
 (defcustom minitest-use-spring nil
-  "Use spring as the default runner"
+  "Use spring as the default runner."
   :type 'boolean
   :group 'minitest)
 
@@ -59,49 +59,51 @@ This is intended for use with Rails versions 5+."
   :group 'minitest)
 
 (defcustom minitest-use-docker nil
-  "Execute inside `minitest-docker-container' with `minitest-docker-command'"
+  "Execute inside `minitest-docker-container' with `minitest-docker-command'."
   :type 'boolean
   :group 'minitest)
 
 (defcustom minitest-docker-command '("docker-compose" "exec")
-  "Command to execute tests with docker"
+  "Command to execute tests with docker."
   :type 'list
   :group 'minitest)
 
 (defcustom minitest-docker-container nil
-  "Specify the name of the docker container to target"
+  "Specify the name of the docker container to target."
   :type 'string
   :group 'minitest)
 
 (defcustom minitest-default-env nil
-  "Default env vars for minitest"
+  "Default env vars for minitest."
   :type 'string
   :group 'minitest)
 
 (defcustom minitest-default-command '("ruby" "-Ilib:test:spec")
-  "Default command for minitest"
+  "Default command for minitest."
   :type 'list
   :group 'minitest)
 
 (defcustom minitest-spring-command '("spring" "rake" "test")
-  "Spring command for minitest"
+  "Spring command for minitest."
   :type 'list
   :group 'minitest)
 
 (defcustom minitest-test-directory-name "test"
-  "The folder name within `minitest-project-root' that holds the tests"
+  "The folder name within `minitest-project-root' that holds the tests."
   :type 'string
   :group 'minitest)
 
 (defcustom minitest-source-directory-names '("app" "lib")
-  "The folder names within `minitest-project-root' that hold the source code"
+  "The folder names within `minitest-project-root' that hold the source code."
   :type 'list
   :group 'minitest)
 
 (defun minitest-buffer-name (file-or-dir)
+  "Name for specific FILE-OR-DIR minitest compilation buffer."
   (concat "*Minitest " file-or-dir "*"))
 
 (defun minitest-test-command ()
+  "Return command to be used when invoking the test runner."
   (let ((command (cond (minitest-use-spring minitest-spring-command)
                        ((minitest-zeus-p) '("zeus" "test"))
                        (minitest-use-rails '("bin/rails" "test"))
@@ -110,6 +112,7 @@ This is intended for use with Rails versions 5+."
       command)))
 
 (defun minitest-bundler-command ()
+  "Return command strings for invoking Ruby's bundler."
   (cond (minitest-use-bundler '("bundle" "exec"))
         (t nil)))
 
@@ -123,6 +126,7 @@ The current directory is assumed to be the project's root otherwise."
       (error "You're not into a project")))
 
 (defun minitest-zeus-p ()
+  "Determine if the runner should use zeus."
   (and minitest-use-zeus-when-possible
        (file-exists-p (concat (minitest-project-root) ".zeus.sock"))))
 
@@ -130,6 +134,7 @@ The current directory is assumed to be the project's root otherwise."
   (add-hook 'compilation-filter-hook 'minitest-colorize-compilation-buffer))
 
 (defun minitest-colorize-compilation-buffer ()
+  "Apply ansi color on the compilation buffer."
   (read-only-mode 1)
   (ansi-color-apply-on-region (point-min) (point-max))
   (read-only-mode -1))
@@ -138,6 +143,7 @@ The current directory is assumed to be the project's root otherwise."
   "Variable to store the last command running.")
 
 (defun minitest--run-command (command &optional file-name)
+  "Run COMMAND on current buffor or FILE-NAME."
   (if (fboundp 'rvm-activate-corresponding-ruby)
       (rvm-activate-corresponding-ruby))
 
@@ -150,13 +156,14 @@ The current directory is assumed to be the project's root otherwise."
      (lambda (arg) (minitest-buffer-name (or file-name ""))))))
 
 (defun minitest--file-command (&optional post-command)
-  "Run COMMAND on currently visited file."
+  "Run POST-COMMAND on currently visited file."
   (let ((file-name (file-relative-name (buffer-file-name) (minitest-project-root))))
     (if file-name
 	(minitest-run-file file-name post-command)
       (error "Buffer is not visiting a file"))))
 
 (defun minitest--test-name-flag (test-name)
+  "Return string identifying TEST-NAME."
   (let ((flag (format "-n/%s/" test-name)))
     (cond (minitest-use-spring (concat "TESTOPTS=" flag))
           (t flag))))
@@ -169,8 +176,8 @@ The current directory is assumed to be the project's root otherwise."
   "List of regular expressions for minitest test definition patterns.")
 
 (defun minitest--match-point (re)
-  "Searches for a regular expression backwards from end of the current line.
-Sets the match-string and returns the point where the match begins or nil."
+  "Search for regular expression RE backwards from end of the current line.
+Sets the `match-string' and returns the point where the match begins or nil."
   (save-excursion
     (save-restriction
       (widen)
@@ -178,7 +185,7 @@ Sets the match-string and returns the point where the match begins or nil."
       (re-search-backward re nil t))))
 
 (defun minitest--extract-test ()
-  "Finds the nearest test name matching one of the `minitest--test-regexps'.
+  "Find the nearest test name matching one of the `minitest--test-regexps'.
 Returns a (CMD . NAME) pair or nil."
   (let* ((matches (delete nil (mapcar 'minitest--match-point minitest--test-regexps)))
          (distances (mapcar (lambda (pos) (- (point) pos)) matches)))
@@ -188,19 +195,20 @@ Returns a (CMD . NAME) pair or nil."
           `(,(match-string 1) . ,(match-string 2))))))
 
 (defun minitest--verify-single-with-regex ()
+  "Run verify command if a test is matched at point."
   (let ((test (minitest--extract-test)))
     (if test
         (minitest--file-command (minitest--test-name-flag (minitest--post-command test)))
-      (error "No test found. Make sure you are on a file that has `def test_foo` or `test \"foo\"`"))))
+      (error "No test found.  Make sure you are on a file that has `def test_foo` or `test \"foo\"`"))))
 
 (defun minitest--verify-single-rails ()
-  "Runs `bin/rails test path/to/test_file.rb:NN' with the current line number."
+  "Run `bin/rails test path/to/test_file.rb:NN' with the current line number."
   (let ((line-number (line-number-at-pos (point)))
         (file-name (file-relative-name (buffer-file-name) (minitest-project-root))))
     (minitest-run-file (format "%s:%s" file-name line-number))))
 
 (defun minitest-verify-all ()
-  "Run all tests."
+  "Run all test examples in the current project."
   (interactive)
   (minitest--run-command
     (mapconcat 'shell-quote-argument
@@ -220,20 +228,21 @@ Returns a (CMD . NAME) pair or nil."
     (minitest--verify-single-with-regex)))
 
 (defun minitest--post-command (test)
+  "Format the TEST name depending on spec or test style."
   (let ((name (cdr test)))
     (if (string= (car test) "it")
         name
       (format "%s" (replace-regexp-in-string "[\s#:]" "_" name)))))
 
 (defun minitest-rerun ()
-  "Run the last command"
+  "Run the last command."
   (interactive)
   (if minitest--last-command
       (apply #'minitest--run-command minitest--last-command)
     (error "There is no previous command to run")))
 
 (defun minitest-run-file (file-name &optional post-command)
-  "Run the given file"
+  "Run the given file FILE-NAME with optional POST-COMMAND specifier."
   (let ((bundle (minitest-bundler-command))
         (command (minitest-test-command)))
     (minitest--run-command
@@ -254,11 +263,11 @@ Returns a (CMD . NAME) pair or nil."
       (define-key prefix-map (kbd "t") 'minitest-toggle-test-and-target)
       (define-key map minitest-keymap-prefix prefix-map))
     map)
-  "Keymap for minitest-mode.")
+  "Keymap for `minitest-mode'.")
 
 ;;;###autoload
 (define-minor-mode minitest-mode
-  "Minor mode for *_test (minitest) files"
+  "Minor mode for *_test (minitest) files."
   :lighter " Minitest"
   :keymap minitest-mode-map
   :group 'minitest
@@ -278,7 +287,7 @@ Returns a (CMD . NAME) pair or nil."
   "The directory containing minitest snippets.")
 
 (defun minitest-install-snippets ()
-  "Add `minitest-snippets-dir' to `yas-snippet-dirs' and load snippets from it."
+  "Add `minitest-snippets-dir' to variable `yas-snippet-dirs' and load snippets from it."
   (interactive)
   (let ((yasnippet-available (require 'yasnippet nil t)))
     (if yasnippet-available
@@ -290,11 +299,11 @@ Returns a (CMD . NAME) pair or nil."
   "The regex to identify test files.")
 
 (defun minitest-test-file-p (file-name)
-  "Returns true if the specified file name is a test."
+  "Return non-nil if the specified FILE-NAME is a test."
   (numberp (string-match minitest-test-file-name-re file-name)))
 
 (defun minitest-buffer-is-test-p ()
-  "Return true if the current buffer is a test."
+  "Return non-nil if the current buffer is a test."
   (and (buffer-file-name)
        (minitest-test-file-p (buffer-file-name))))
 
@@ -307,12 +316,13 @@ target, otherwise the test."
   (find-file (minitest--test-or-target)))
 
 (defun minitest--test-or-target ()
+  "Return either the test file or implementation file related to current buffer."
   (if (minitest-buffer-is-test-p)
       (minitest--target-file-for (buffer-file-name))
     (minitest--test-file-for (buffer-file-name))))
 
 (defun minitest--test-file-for (a-file-name)
-  "Find test for the specified file."
+  "Find test for A-FILE-NAME."
   (if (minitest-test-file-p a-file-name)
       a-file-name
     (let* ((replace-regex "^\\.\\./[^/]+/")
@@ -357,6 +367,7 @@ target, otherwise the test."
 
 ;;;###autoload
 (defun minitest-enable-appropriate-mode ()
+  "Enable `minitest-mode' if it is appropriate."
   (if (minitest-buffer-is-test-p)
       (minitest-mode)))
 
