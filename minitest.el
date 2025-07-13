@@ -28,6 +28,9 @@
 
 (require 'dash)
 (require 'ansi-color)
+(declare-function yas-load-directory "yasnippet")
+(declare-function yas--load-pending-jits "yasnippet")
+(defvar yas-snippet-dirs)
 
 (defcustom minitest-keymap-prefix (kbd "C-c ,")
   "Minitest keymap prefix."
@@ -35,7 +38,7 @@
   :type 'string)
 
 (defcustom minitest-use-zeus-when-possible t
-  "When t and .zeus.sock is present, run tests with 'zeus'."
+  "When t and .zeus.sock is present, run tests with zeus."
   :type 'boolean
   :group 'minitest)
 
@@ -56,7 +59,7 @@ This is intended for use with Rails versions 5+."
   :group 'minitest)
 
 (defcustom minitest-use-docker nil
-  "Execute test command inside `minitest-docker-container' with `minitest-docker-command'"
+  "Execute inside `minitest-docker-container' with `minitest-docker-command'"
   :type 'boolean
   :group 'minitest)
 
@@ -167,7 +170,7 @@ The current directory is assumed to be the project's root otherwise."
 
 (defun minitest--match-point (re)
   "Searches for a regular expression backwards from end of the current line.
-Sets the match-string and returns the location of point where the match begins or nil."
+Sets the match-string and returns the point where the match begins or nil."
   (save-excursion
     (save-restriction
       (widen)
