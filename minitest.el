@@ -1,13 +1,24 @@
-;;; minitest.el --- An Emacs mode for ruby minitest files
+;;; minitest.el --- An minor mode for ruby minitest files
 
 ;; Copyright © 2013-2015 Arthur Nogueira Neves
+;; Copyright © 2020 Grant Shoshin Shangreaux
 
 ;; Author: Arthur Neves
-;; URL: https://github.com/arthurnn/minitest-emacs
+;; URL: https://git.sr.ht/~shoshin/minitest-emacs
 ;; Version: 0.10.0
-;; Package-Requires: ((dash "1.0.0"))
+;; Package-Requires: ((dash "1.0.0") (emacs "24.3"))
 
 ;; This file is NOT part of GNU Emacs.
+
+;;; Commentary:
+
+;; Use the following commands in minitest buffers to invoke the test runner
+;; and get results in a compilation buffer:
+
+;; minitest-verify
+;; minitest-verify-single
+;; minitest-rerun
+;; minitest-verify-all
 
 ;;; Change Log:
 
@@ -113,9 +124,9 @@ The current directory is assumed to be the project's root otherwise."
        (file-exists-p (concat (minitest-project-root) ".zeus.sock"))))
 
 (define-derived-mode minitest-compilation-mode compilation-mode ""
-  (add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
+  (add-hook 'compilation-filter-hook 'minitest-colorize-compilation-buffer))
 
-(defun colorize-compilation-buffer ()
+(defun minitest-colorize-compilation-buffer ()
   (read-only-mode 1)
   (ansi-color-apply-on-region (point-min) (point-max))
   (read-only-mode -1))
@@ -256,8 +267,7 @@ Returns a (CMD . NAME) pair or nil."
               (yas-activate-extra-mode 'minitest-mode)
             (make-local-variable 'yas-extra-modes)
             (add-to-list 'yas-extra-modes 'minitest-mode)
-            (yas--load-pending-jits)))))
-  )
+            (yas--load-pending-jits))))))
 
 (defvar minitest-snippets-dir
   (let ((current-file-name (or load-file-name (buffer-file-name))))
