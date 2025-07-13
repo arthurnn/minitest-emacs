@@ -287,7 +287,7 @@ Returns a (CMD . NAME) pair or nil."
   "The directory containing minitest snippets.")
 
 (defun minitest-install-snippets ()
-  "Add `minitest-snippets-dir' to variable `yas-snippet-dirs' and load snippets from it."
+  "Add `minitest-snippets-dir' to variable `yas-snippet-dirs' and load snippets."
   (interactive)
   (let ((yasnippet-available (require 'yasnippet nil t)))
     (if yasnippet-available
