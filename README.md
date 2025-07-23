@@ -1,7 +1,6 @@
 # minitest.el
 ### A minitest mode for emacs
 
-[![Build Status](https://travis-ci.org/arthurnn/minitest-emacs.svg?branch=master)](https://travis-ci.org/arthurnn/minitest-emacs)
 [![MELPA](https://melpa.org/packages/minitest-badge.svg)](https://melpa.org/#/minitest)
 
 # Usage
@@ -17,32 +16,13 @@ Command                                         | Description                   
 
 ## Manual
 
-### Emacs
-
 Just drop `minitest.el`. somewhere in your `load-path`. And:
+
 ```lisp
-(add-to-list 'load-path "~/emacs.d/vendor")
 (require 'minitest)
 ```
 
-### Spacemacs
-
-The Spacemacs Ruby layer supports minitest-emacs as one of its configurable test runners.
-To set the default Ruby test runner to use this package, edit the `ruby` layer entry in
-the `dotspacemacs-configuration-layers` list defined in your `.spacemacs` file:
-
-```lisp
-dotspacemacs-configuration-layers
-'(
-  (ruby :variables
-        ruby-test-runner 'minitest)
-)
-
-```
-
-See the Spacemacs Ruby layer documentation for more info.
-
-## Using [Marmalade](http://marmalade-repo.org/) or [MELPA](http://melpa.milkbox.net/)
+## Using [MELPA](https://melpa.org)
 
 ```
 M-x package-install minitest
@@ -50,31 +30,21 @@ M-x package-install minitest
 
 # Configuration
 
-To enable minitest mode on ruby files, simply add to your dotfile:
+To enable minitest mode on ruby files, simply add this hook to your dotfile:
 
 ```lisp
 (add-hook 'ruby-mode-hook 'minitest-mode)
 ```
 
-In case you are using Spacemacs, add the above line to `dotspacemacs/user-config` which is towards the end
-of your `.spacemacs` dotfile:
-
-```lisp
-(defun dotspacemacs/user-config ()
-	(add-hook 'ruby-mode-hook 'minitest-mode))
-```
-If you have another hook already in here make sure to add this hook within its own set of parenthesis so that
-there is only one hook per parenthesis.
-
 ## Rails
 
-If you are working on a Rails project, you can set `minitest-use-rails` to true in order to use the `bin/rails test`
-command when running examples.
+The Rails test runner is invoked using `bin/rails test` instead of the default minitest command.
+The `minitest-use-rails` custom variable can be set to `t` to invoke the Rails runner.
 
 ## Docker
 
 You can run tests inside a Docker container by setting `minitest-use-docker` to
-true and `minitest-docker-container` to the name of the container. By default this
+`t` and `minitest-docker-container` to the name of the container. By default this
 will use the command `docker-compose exec` to run the minitest command, which assumes
 you already have the specified container running. To customize the command, edit the
 `minitest-docker-command` variable.
@@ -89,33 +59,5 @@ If you have yasnippet installed, you can load the snippets:
 
 ## Scroll Position
 
-The `compilation-scroll-output` variable, when set to `t`, scrolls to the bottom
-of the test output. When set to `nil`, the test output buffer stays scrolled to
-the top.
-
-Before version 0.10.0, this variable was set to `t` before running tests, but
-after version 0.10.0 it is not set explicitly anymore. In order to get back the
-old behavior, just set `compilation-scroll-output` to `t` yourself.
-
-## License
-
-The MIT License (MIT)
-
-Copyright (c) 2013 Arthur Nogueira Neves
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+If you'd like to automatically scroll to the bottom of the test report, set the
+`compilation-scroll-output` variable to `t`.
